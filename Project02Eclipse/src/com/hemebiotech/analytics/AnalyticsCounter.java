@@ -1,39 +1,31 @@
 package com.hemebiotech.analytics;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.util.TreeMap;
+import java.util.List;
 import java.util.Map;
 
 public class AnalyticsCounter {
-	private static Map<String, Integer> symptoms = new TreeMap<>();
+	private static final String INPUT_FILE_PATH = System.getProperty("user.dir").concat("/resources/symptoms.txt");
+	private static final String OUTPUT_FILE_PATH = System.getProperty("user.dir").concat("/resources/result.out");
 	
 	public static void main(String args[]) throws Exception {
-		String dir = System.getProperty("user.dir");
-
-		// Read file
-		BufferedReader reader = new BufferedReader (new FileReader(dir.concat("/Project02Eclipse/symptoms.txt")));
-		String line = reader.readLine();
-
-		while (line != null) {
-			Integer quantity = 1;
-			if(symptoms.containsKey(line)) {
-				quantity = symptoms.get(line) + 1;
-			}
-			symptoms.put(line, quantity);
-
-			line = reader.readLine();	// get another symptom
-		}
-		reader.close();
-		
-		// Generate output
-		FileWriter writer = new FileWriter (dir.concat("/Project02Eclipse/result.out"));
-
-		for (String key : symptoms.keySet()) {
-			writer.write(key + ": " + symptoms.get(key) + "\n");
-			System.out.println("key: " + key + " quantity: " + symptoms.get(key));
-		}
-		writer.close();
+		List<String> symptoms = readSymptomsFile();
+		Map<String, Integer> symptomsOrder = countSymptoms(symptoms);
+		writeSymptomsFile(symptomsOrder);
+	}
+	
+	private static List<String> readSymptomsFile() throws Exception {
+		ReadSymptomsFile reader = new ReadSymptomsFile(INPUT_FILE_PATH);
+		return reader.GetSymptoms();
+	}
+	
+	private static Map<String, Integer> countSymptoms(List<String> symptoms) {
+		SymptomsTreeMap symptomsTreeMap = new SymptomsTreeMap();
+		symptomsTreeMap.countSymptoms(symptoms);
+		return symptomsTreeMap.getSymptoms();
+	}
+	
+	private static void writeSymptomsFile(Map<String, Integer> symptomsOrder) throws Exception {
+		WriteSymptomsFile writer = new WriteSymptomsFile(OUTPUT_FILE_PATH);
+		writer.write(symptomsOrder);
 	}
 }
