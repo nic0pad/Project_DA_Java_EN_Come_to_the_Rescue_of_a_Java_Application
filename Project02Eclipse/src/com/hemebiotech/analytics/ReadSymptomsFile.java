@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
+/**
+ * Class to read the file and extract all symptoms
+ *
+ */
 public class ReadSymptomsFile implements ISymptomsReader {
 	
 	private String filepath;
@@ -19,7 +23,7 @@ public class ReadSymptomsFile implements ISymptomsReader {
 	}
 	
 	@Override
-	public List<String> GetSymptoms() {
+	public List<String> getSymptoms() {
 		List<String> listOfStrings = new ArrayList<String>();
    
 		try {

@@ -4,6 +4,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Map;
 
+/**
+ * Write symptoms list in a file
+ *
+ */
 public class WriteSymptomsFile implements ISymptomsWriter {
 	private String filepath;
 	

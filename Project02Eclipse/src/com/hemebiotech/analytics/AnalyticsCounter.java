@@ -3,29 +3,60 @@ package com.hemebiotech.analytics;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Class of treatment of symptoms file
+ * 
+ */
 public class AnalyticsCounter {
-	private static final String INPUT_FILE_PATH = System.getProperty("user.dir").concat("/resources/symptoms.txt");
-	private static final String OUTPUT_FILE_PATH = System.getProperty("user.dir").concat("/resources/result.out");
+	private String inputFile;
+	private String outputFile;
 	
-	public static void main(String args[]) throws Exception {
-		List<String> symptoms = readSymptomsFile();
-		Map<String, Integer> symptomsOrder = countSymptoms(symptoms);
-		writeSymptomsFile(symptomsOrder);
+	public AnalyticsCounter(String inputFile, String outputFile) {
+		this.inputFile = inputFile;
+		this.outputFile = outputFile;
 	}
 	
-	private static List<String> readSymptomsFile() throws Exception {
-		ReadSymptomsFile reader = new ReadSymptomsFile(INPUT_FILE_PATH);
-		return reader.GetSymptoms();
+	/**
+	 * Method to launch all the process
+	 * @throws Exception
+	 */
+	public void launch() throws Exception {
+		List<String> symptoms = this.readSymptomsFile();
+		Map<String, Integer> symptomsOrder = this.countSymptoms(symptoms);
+		this.writeSymptomsFile(symptomsOrder);
 	}
 	
-	private static Map<String, Integer> countSymptoms(List<String> symptoms) {
+	/**
+	 * Read the input file with all symptoms
+	 * 
+	 * @return List - List of symptoms
+	 * @throws Exception
+	 */
+	private List<String> readSymptomsFile() throws Exception {
+		ReadSymptomsFile reader = new ReadSymptomsFile(this.inputFile);
+		return reader.getSymptoms();
+	}
+	
+	/**
+	 * Count and ordered symptoms
+	 * 
+	 * @param symptoms
+	 * @return Map - List ordered of symptoms
+	 */
+	private Map<String, Integer> countSymptoms(List<String> symptoms) {
 		SymptomsTreeMap symptomsTreeMap = new SymptomsTreeMap();
 		symptomsTreeMap.countSymptoms(symptoms);
 		return symptomsTreeMap.getSymptoms();
 	}
 	
-	private static void writeSymptomsFile(Map<String, Integer> symptomsOrder) throws Exception {
-		WriteSymptomsFile writer = new WriteSymptomsFile(OUTPUT_FILE_PATH);
+	/**
+	 * Write the output file with symptoms counted and ordered
+	 * 
+	 * @param symptomsOrder
+	 * @throws Exception
+	 */
+	private void writeSymptomsFile(Map<String, Integer> symptomsOrder) throws Exception {
+		WriteSymptomsFile writer = new WriteSymptomsFile(this.outputFile);
 		writer.write(symptomsOrder);
 	}
 }
